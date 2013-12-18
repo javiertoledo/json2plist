@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby -w
+require "slop"
+require "json2plist"
+
+usage_message = "Usage: json2plist -i <inputfile.json> -o <outputfile.plist>"
+
+begin
+  options = Slop.parse(banner: usage_message, help: true) do
+    on :i, :input=, 'JSON file', required: true
+    on :o, :output=, 'Plist file', required: true
+  end
+  json = File.read(options[:input])
+  File.write(options[:output], Json2plist::convert(json))
+
+rescue Slop::MissingOptionError
+  puts usage_message
+end
